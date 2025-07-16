@@ -1,8 +1,9 @@
 package com.client_app;
 
+import com.shared_app.shared_entity.Product;
 import com.shared_app.PurchaseService;
 import com.shared_app.PaymentService;
-import com.shared_app.Product;
+
 import java.util.List;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -61,14 +62,33 @@ public class ClientAppApplication implements CommandLineRunner {
 						System.out.println("\n=== ADICIONAR PRODUTO ===");
 						System.out.print("Nome do produto: ");
 						String nome = scanner.nextLine();
+
 						System.out.print("Preço: R$");
-						double preco = scanner.nextDouble();
+						String precoInput = scanner.nextLine().replace(",", ".");
+
+						double preco;
+						try {
+							preco = Double.parseDouble(precoInput);
+						} catch (NumberFormatException e) {
+							System.out.println("[ERRO] Valor inválido! Digite um número válido para preço.");
+							break;
+						}
+
 						System.out.print("Estoque: ");
-						int estoque = scanner.nextInt();
+						String estoqueInput = scanner.nextLine();
+
+						int estoque;
+						try {
+							estoque = Integer.parseInt(estoqueInput);
+						} catch (NumberFormatException e) {
+							System.out.println("[ERRO] Valor inválido! Digite um número inteiro para estoque.");
+							break;
+						}
 
 						String novoId = purchase.addProduct(nome, preco, estoque);
-						System.out.println("✅ Produto adicionado com ID: " + novoId);
+						System.out.println("Produto adicionado com ID: " + novoId);
 						break;
+
 
 					case 3: // Atualizar produto
 						System.out.println("\n=== ATUALIZAR PRODUTO ===");
@@ -77,16 +97,27 @@ public class ClientAppApplication implements CommandLineRunner {
 						System.out.print("Novo nome: ");
 						String novoNome = scanner.nextLine();
 						System.out.print("Novo preço: R$");
-						double novoPreco = scanner.nextDouble();
-						System.out.print("Novo estoque: ");
-						int novoEstoque = scanner.nextInt();
-
-						boolean atualizado = purchase.updateProduct(idUpdate, novoNome, novoPreco, novoEstoque);
-						if (atualizado) {
-							System.out.println("✅ Produto atualizado com sucesso!");
-						} else {
-							System.out.println("❌ Produto não encontrado!");
+						String priceInput = scanner.nextLine().replace(",", ".");
+						double novoPreco;
+						try {
+							novoPreco = Double.parseDouble(priceInput);
+						} catch (NumberFormatException e) {
+							System.out.println("[ERRO] Valor inválido! Digite um número no campo de preço.");
+							break;
 						}
+
+						System.out.print("Novo estoque: ");
+						String estoqueeInput = scanner.nextLine();  // variável com um "e"
+
+						int estoquee;
+						try {
+							estoque = Integer.parseInt(estoqueeInput);
+						} catch (NumberFormatException e) {
+							System.out.println("[ERRO] Valor inválido! Digite um número inteiro para estoque.");
+							break;
+						}
+						String atualizado = purchase.updateProduct(idUpdate, novoNome, novoPreco, estoque);
+						System.out.println(atualizado);
 						break;
 
 					case 4: // Remover produto
@@ -96,21 +127,28 @@ public class ClientAppApplication implements CommandLineRunner {
 
 						boolean removido = purchase.deleteProduct(idDelete);
 						if (removido) {
-							System.out.println("✅ Produto removido com sucesso!");
+							System.out.println("Produto removido com sucesso!");
 						} else {
-							System.out.println("❌ Produto não encontrado!");
+							System.out.println("Produto não encontrado!");
 						}
 						break;
 
 					case 5: // Criar pedido
 						System.out.println("\n=== CRIAR PEDIDO ===");
-						System.out.print("Nome do produto: ");
-						String produtoPedido = scanner.nextLine();
+						System.out.print("Insira o id do produto: ");
+						String produtId = scanner.nextLine();
 						System.out.print("Quantidade: ");
-						int quantidade = scanner.nextInt();
+						int quantidade;
+						try {
+							quantidade = scanner.nextInt();
+						} catch (NumberFormatException e) {
+							System.out.println("[ERRO] Valor inválido! Digite um número no campo de quantidade.");
+							break;
+						}
+						scanner.nextLine();
 
-						String orderId = purchase.processOrder(produtoPedido, quantidade);
-						System.out.println("✅ Pedido criado com ID: " + orderId);
+						String orderResponse = purchase.processOrder(produtId, quantidade);
+						System.out.println(orderResponse);
 						break;
 
 					case 6: // Processar pagamento
@@ -119,9 +157,8 @@ public class ClientAppApplication implements CommandLineRunner {
 						String orderIdPay = scanner.nextLine();
 						System.out.print("Valor: R$");
 						double valor = scanner.nextDouble();
-
 						String resultado = payment.pay(orderIdPay, valor);
-						System.out.println("✅ " + resultado);
+						System.out.println(resultado);
 						break;
 
 					case 0: // Sair
@@ -129,7 +166,7 @@ public class ClientAppApplication implements CommandLineRunner {
 						return;
 
 					default:
-						System.out.println("❌ Opção inválida!");
+						System.out.println("Opção inválida!");
 				}
 			}
 
