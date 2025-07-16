@@ -23,6 +23,7 @@ public class ClientAppApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 		try {
+			//procura o objeto remoto registrado e faz um biding
 			PurchaseService purchase = (PurchaseService) Naming.lookup("rmi://localhost:1099/PurchaseService");
 			PaymentService payment = (PaymentService) Naming.lookup("rmi://localhost:1100/PaymentService");
 			Scanner scanner = new Scanner(System.in);

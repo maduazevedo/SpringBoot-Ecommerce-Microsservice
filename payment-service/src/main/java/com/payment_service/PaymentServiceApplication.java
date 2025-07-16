@@ -11,7 +11,7 @@ public class PaymentServiceApplication {
 		SpringApplication.run(PaymentServiceApplication.class, args);
 
 		try {
-			LocateRegistry.createRegistry(1100); // outro registro opcional
+			LocateRegistry.createRegistry(1100);
 			PaymentService service = new PaymentServiceImpl();
 			Naming.rebind("rmi://localhost:1100/PaymentService", service);
 			System.out.println("PaymentService registrado no RMI.");

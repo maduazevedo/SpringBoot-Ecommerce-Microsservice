@@ -1,4 +1,4 @@
-package com.shared_app;
+package com.shared_app.shared_entity;
 
 import java.io.Serializable;
 
@@ -19,7 +19,6 @@ public class Product implements Serializable {
     public String getName() { return name; }
     public double getPrice() { return price; }
     public int getStock() { return stock; }
-
 
     public void setName(String name) { this.name = name; }
     public void setPrice(double price) { this.price = price; }
